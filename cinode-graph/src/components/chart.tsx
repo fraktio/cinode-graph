@@ -32,6 +32,7 @@ const Chart = ({ data }: IProps) => {
       .attr('transform', `translate(${margin.left},10)`);
     const width = widthValue - margin.left - margin.right - strokeWidth * 2;
     const height = heightValue - margin.top - margin.bottom;
+    const size = data && data.length ? data.length : 0;
 
     const radius = 10;
 
@@ -47,20 +48,21 @@ const Chart = ({ data }: IProps) => {
     chart
       .append('g')
       .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).ticks(data!.length));
+      .call(d3.axisBottom(xScale).ticks(size));
 
     chart
       .append('g')
       .attr('transform', `translate(0, 0)`)
-      .call(d3.axisLeft(yScale).ticks(data!.length));
+      .call(d3.axisLeft(yScale).ticks(size));
 
+    console.log('DATA: ', data);
     // 400 estimateR so x 0,
     const circles = svg
       .selectAll('circle')
       .data(data)
       .join('circle')
-      .attr('cx', d => d.users * 30)
-      .attr('cy', d => d.estimateRating * 30)
+      .attr('cx', d => d.users * 20)
+      .attr('cy', d => d.averageLevel * 10)
       .attr('r', radius)
       .attr('fill', (d, i) => d3.schemeCategory10[i % 10])
       .on('click', clicked);
@@ -94,7 +96,7 @@ const Chart = ({ data }: IProps) => {
 
   return (
     <>
-      <div id='chart' style={{ width: '80%', height: '80%' }}></div>
+      <div id='chart' style={{ width: '60%', height: '60%' }}></div>
     </>
   );
 };
