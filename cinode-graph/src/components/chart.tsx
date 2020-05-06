@@ -1,34 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 
-interface IProps {
-  title?: string;
+interface TestData {
+  averageLevel: number;
+  tech: string;
+  users: number;
 }
 
-const Chart = ({ title }: IProps) => {
-  const [count, setCount] = useState(0);
+interface IProps {
+  data?: TestData[];
+}
 
+const Chart = ({ data }: IProps) => {
   useEffect(() => {
-    drawChart();
-  });
-
-  const testFunction = () => {
-    setCount(count + 1);
-  };
+    data && drawChart();
+  }, [data]);
 
   const drawChart = () => {
     const heightValue = 400;
     const widthValue = 600;
-    const testData = [
-      {
-        estimateRating: 1,
-        users: 3.5,
-        tech: 'Java'
-      }
-    ];
 
     const svg = d3
       .select('#chart')
+      .html('')
       .append('svg')
       .attr('viewBox', `0 0 ${widthValue} ${heightValue}`);
     const strokeWidth = 1.5;
@@ -53,17 +47,17 @@ const Chart = ({ title }: IProps) => {
     chart
       .append('g')
       .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).ticks(testData.length));
+      .call(d3.axisBottom(xScale).ticks(data!.length));
 
     chart
       .append('g')
       .attr('transform', `translate(0, 0)`)
-      .call(d3.axisLeft(yScale).ticks(testData.length));
+      .call(d3.axisLeft(yScale).ticks(data!.length));
 
     // 400 estimateR so x 0,
     const circles = svg
       .selectAll('circle')
-      .data(testData)
+      .data(data)
       .join('circle')
       .attr('cx', d => d.users * 30)
       .attr('cy', d => d.estimateRating * 30)
@@ -98,6 +92,10 @@ const Chart = ({ title }: IProps) => {
     }
   };
 
-  return <div id='chart' style={{ width: '80%', height: '80%' }} />;
+  return (
+    <>
+      <div id='chart' style={{ width: '80%', height: '80%' }}></div>
+    </>
+  );
 };
 export default Chart;
