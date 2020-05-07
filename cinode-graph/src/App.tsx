@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import Modal from './components/modal';
 import Chart from './components/chart';
 import { getResults } from './services/cinode';
 
@@ -13,17 +14,27 @@ const App = () => {
   const initialArray: D[] = [];
   const [results, setResults] = useState(initialArray);
   const [searchString, setSearchString] = useState('');
+  const [visible, setModalVisible] = useState(false);
 
   const handleSubmit = evt => {
     evt.preventDefault();
     getResults(searchString).then(r => {
       setResults(results => [...results, r.data]);
+      setModalVisible(true);
+      setInterval(() => setModalVisible(false), 2500);
     });
+  };
+
+  const toggleModal = () => {
+    setModalVisible(!visible);
   };
 
   return (
     <div className='App'>
       <header className='App-header'>
+        <Modal show={visible} handleClose={toggleModal}>
+          <p>Added {searchString}!</p>
+        </Modal>
         <form onSubmit={handleSubmit}>
           <label>
             Search by technology:

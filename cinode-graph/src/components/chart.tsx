@@ -32,7 +32,6 @@ const Chart = ({ data }: IProps) => {
       .attr('transform', `translate(${margin.left},10)`);
     const width = widthValue - margin.left - margin.right - strokeWidth * 2;
     const height = heightValue - margin.top - margin.bottom;
-    const size = data && data.length ? data.length : 0;
 
     const radius = 10;
 
@@ -43,17 +42,17 @@ const Chart = ({ data }: IProps) => {
     const xScale = d3
       .scaleLinear()
       .range([0, width])
-      .domain([0, 40]);
+      .domain([0, 35]);
 
     chart
       .append('g')
       .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).ticks(size));
+      .call(d3.axisBottom(xScale).ticks(5));
 
     chart
       .append('g')
       .attr('transform', `translate(0, 0)`)
-      .call(d3.axisLeft(yScale).ticks(size));
+      .call(d3.axisLeft(yScale).ticks(5));
 
     console.log('DATA: ', data);
     // 400 estimateR so x 0,
@@ -61,8 +60,8 @@ const Chart = ({ data }: IProps) => {
       .selectAll('circle')
       .data(data)
       .join('circle')
-      .attr('cx', d => d.users * 20)
-      .attr('cy', d => d.averageLevel * 10)
+      .attr('cx', d => d.users * (widthValue / 35))
+      .attr('cy', d => heightValue - d.averageLevel * (heightValue / 5))
       .attr('r', radius)
       .attr('fill', (d, i) => d3.schemeCategory10[i % 10])
       .on('click', clicked);
@@ -72,9 +71,11 @@ const Chart = ({ data }: IProps) => {
       .attr('dx', function(d) {
         return -20;
       })
+      .text(function(d) {
+        return d.tech;
+      })
       .selectAll('tspan')
-      .join('tspan')
-      .text(d => d.tech);
+      .join('tspan');
 
     function clicked(d, i) {
       d3.select(this)
