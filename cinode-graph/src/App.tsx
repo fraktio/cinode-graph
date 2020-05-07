@@ -15,14 +15,21 @@ const App = () => {
   const [results, setResults] = useState(initialArray);
   const [searchString, setSearchString] = useState('');
   const [visible, setModalVisible] = useState(false);
+  const [byTech, setByTech] = useState(true);
 
   const handleSubmit = evt => {
     evt.preventDefault();
+    setSearchString('');
     getResults(searchString).then(r => {
       setResults(results => [...results, r.data]);
       setModalVisible(true);
       setInterval(() => setModalVisible(false), 2500);
     });
+  };
+
+  const handleOther = evt => {
+    evt.preventDefault();
+    console.log('Hohoo');
   };
 
   const toggleModal = () => {
@@ -35,9 +42,11 @@ const App = () => {
         <Modal show={visible} handleClose={toggleModal}>
           <p>Added {searchString}!</p>
         </Modal>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={byTech ? handleSubmit : handleOther}>
           <label>
-            Search by technology:
+            <div onClick={() => setByTech(!byTech)}>
+              {byTech ? 'Search by technology:' : 'Search by employee'}
+            </div>
             <input
               type='text'
               value={searchString}
