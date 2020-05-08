@@ -18,19 +18,28 @@ interface D {
   userArray: U[];
 }
 
+interface C {
+  info: string;
+}
+
 const App = () => {
   const initialArray: D[] = [];
+  const initialArraySecond: C[] = [];
   const [results, setResults] = useState(initialArray);
   const [searchString, setSearchString] = useState('');
   const [visible, setModalVisible] = useState(false);
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(initialArraySecond);
   const [byTech, setByTech] = useState(true);
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    setContent(searchString);
+    setContent([
+      ...content,
+      {
+        info: searchString
+      }
+    ]);
     setSearchString('');
-    setContent(`Added ${content}.`);
     getResults(searchString).then(r => {
       setResults(results => [...results, r.data]);
       setModalVisible(true);
@@ -50,10 +59,10 @@ const App = () => {
   };
 
   const tester = (test: U[]) => {
-    let temp = '';
+    const temp: C[] = [];
 
     test.map(t => {
-      temp += t.first;
+      temp.push({ info: t.first });
     });
     setContent(temp);
     setModalVisible(true);
@@ -63,7 +72,9 @@ const App = () => {
     <div className='App'>
       <header className='App-header'>
         <Modal show={visible} handleClose={toggleModal}>
-          <p>{content}</p>
+          {content.map(m => (
+            <p>{m.info}</p>
+          ))}
         </Modal>
         <form onSubmit={byTech ? handleSubmit : handleOther}>
           <label>
