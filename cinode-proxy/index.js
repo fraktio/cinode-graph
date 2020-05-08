@@ -50,17 +50,30 @@ function getSkills(skillName) {
 app.get('/skills/:id', async (req, res) => {
   getSkills(req.params.id).then(r => {
     const temp = r;
+    const users = [];
     let count = 0;
 
     temp.map(m => {
       count = count + m.skills[0].level;
+      users.push({
+        first: m.firstname,
+        last: m.lastname,
+        level: m.skills[0].level
+      });
     });
     const average = count / temp.length;
     res.json({
       tech: req.params.id,
-      users: temp.length,
+      userCount: temp.length,
+      userArray: users,
       averageLevel: average
     });
+  });
+});
+
+app.get('/skillz/:id', async (req, res) => {
+  res.json({
+    test: 'Test'
   });
 });
 

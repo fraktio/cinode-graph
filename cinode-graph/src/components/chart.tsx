@@ -1,17 +1,25 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 
+interface U {
+  first: string;
+  last: string;
+  level: number;
+}
+
 interface TestData {
   averageLevel: number;
   tech: string;
-  users: number;
+  userCount: number;
+  userArray: U[];
 }
 
 interface IProps {
   data?: TestData[];
+  f: Function;
 }
 
-const Chart = ({ data }: IProps) => {
+const Chart = ({ data, f }: IProps) => {
   useEffect(() => {
     data && drawChart();
   }, [data]);
@@ -60,11 +68,12 @@ const Chart = ({ data }: IProps) => {
       .selectAll('circle')
       .data(data)
       .join('circle')
-      .attr('cx', d => d.users * (widthValue / 35))
+      .attr('cx', d => d.userCount * (widthValue / 35))
       .attr('cy', d => heightValue - d.averageLevel * (heightValue / 5))
       .attr('r', radius)
       .attr('fill', (d, i) => d3.schemeCategory10[i % 10])
-      .on('click', clicked);
+      // .on('click', clicked);
+      .on('click', d => f(d.userArray));
 
     circles
       .append('text')
