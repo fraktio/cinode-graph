@@ -47,6 +47,34 @@ function getSkills(skillName) {
     .catch(error => console.log('Error: ', error));
 }
 
+function getUsers() {
+  const basic = new Buffer(
+    `${process.env.ACCESS_ID}:${process.env.ACCESS_SECRET}`,
+    'binary'
+  ).toString('base64');
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${basic}`
+    }
+  };
+
+  return axios
+    .get(apiUrl + '/token', config)
+    .then(res => {
+      const url = apiUrl + '/v0.1/companies/1404/users';
+      return axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${res.data.access_token}`
+        }
+      });
+    })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => console.log('Error: ', error));
+}
+
 app.get('/skills/:id', async (req, res) => {
   getSkills(req.params.id).then(r => {
     const temp = r;
@@ -71,44 +99,21 @@ app.get('/skills/:id', async (req, res) => {
   });
 });
 
-app.get('/skillz/:id', async (req, res) => {
-  res.json({
-    test: 'Test'
+app.get('/user/:id', async (req, res) => {
+  getUsers().then(r => {
+    const temp = r;
+    let userId;
+    temp.map(t => {
+      const test = (t.firstname + ' ' + t.lastname).toLowerCase();
+      if (test === req.params.id.toLowerCase()) {
+        userId = t.companyUserId;
+      }
+    });
+
+    res.json({
+      id: userId
+    });
   });
-});
-
-app.get('/companyskills', async (req, res) => {
-  const techs = ['react', 'javascript'];
-  const allHits = [
-    {
-      tech: 'oma',
-      users: 10,
-      averageLevel: 1.5
-    }
-  ];
-
-  techs.map(t => {
-    getSkills(t)
-      .then(r => {
-        const temp = r;
-        let count = 0;
-
-        temp.map(m => {
-          count = count + m.skills[0].level;
-        });
-        const average = count / temp.length;
-        const tempObject = {
-          tech: t,
-          users: temp.length,
-          averageLevel: average
-        };
-        //console.log("Temp object: ", tempObject);
-        allHits.push(tempObject);
-      })
-      .catch(error => console.log('Error finding skill, ', error));
-  });
-  console.log('Items in array: ', allHits);
-  res.json(allHits);
 });
 
 function notFound(req, res, next) {

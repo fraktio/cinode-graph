@@ -3,7 +3,7 @@ import Adjust from '@material-ui/icons/Adjust';
 import './App.css';
 import Modal from './components/modal';
 import Chart from './components/chart';
-import { getResults, getTest } from './services/cinode';
+import { getResults, getUserSkills } from './services/cinode';
 
 interface U {
   first: string;
@@ -47,7 +47,7 @@ const App = () => {
 
   const handleOther = evt => {
     evt.preventDefault();
-    getTest(searchString).then(r => {
+    getUserSkills(searchString).then(r => {
       console.log('DATA: ', r);
     });
   };
@@ -79,7 +79,7 @@ const App = () => {
           <label>
             <div onClick={() => setByTech(!byTech)}>
               <Adjust />
-              {byTech ? 'Search by technology:' : 'Search by employee'}
+              {byTech ? 'Search by technology:' : 'Search by employee:'}
             </div>
             <input
               type='text'
