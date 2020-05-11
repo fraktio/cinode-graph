@@ -62,8 +62,6 @@ const Chart = ({ data, f }: IProps) => {
       .attr('transform', `translate(0, 0)`)
       .call(d3.axisLeft(yScale).ticks(5));
 
-    console.log('DATA: ', data);
-    // 400 estimateR so x 0,
     const circles = svg
       .selectAll('circle')
       .data(data)
@@ -72,8 +70,7 @@ const Chart = ({ data, f }: IProps) => {
       .attr('cy', d => heightValue - d.averageLevel * (heightValue / 5))
       .attr('r', radius)
       .attr('fill', (d, i) => d3.schemeCategory10[i % 10])
-      // .on('click', clicked);
-      .on('click', d => f(d.userArray));
+      .on('click', clicked);
 
     circles
       .append('text')
@@ -87,6 +84,7 @@ const Chart = ({ data, f }: IProps) => {
       .join('tspan');
 
     function clicked(d, i) {
+      f(d.userArray);
       d3.select(this)
         .transition()
         .attr('fill', 'black')
@@ -95,7 +93,6 @@ const Chart = ({ data, f }: IProps) => {
         .attr('r', radius)
         .attr('fill', d3.schemeCategory10[i % 10]);
       console.log(
-        "Clicked circle's X and Y: ",
         d3.select(this).attr('cx'),
         d3.select(this).attr('cy'),
         'D3 values : ',

@@ -34,7 +34,6 @@ const App = () => {
   const handleSubmit = evt => {
     evt.preventDefault();
     setContent([
-      ...content,
       {
         info: searchString
       }
@@ -42,8 +41,7 @@ const App = () => {
     setSearchString('');
     getResults(searchString).then(r => {
       setResults(results => [...results, r.data]);
-      setModalVisible(true);
-      // setInterval(() => setModalVisible(false), 2500);
+      setTimeout(() => setModalVisible(true), 250);
     });
   };
 
@@ -61,11 +59,12 @@ const App = () => {
   const tester = (test: U[]) => {
     const temp: C[] = [];
 
+    test.sort((a, b) => a.level - b.level);
     test.map(t => {
-      temp.push({ info: t.first });
+      temp.push({ info: t.first + ' ' + t.last + ' level ' + t.level });
     });
     setContent(temp);
-    setModalVisible(true);
+    setTimeout(() => setModalVisible(true), 500);
   };
 
   return (
