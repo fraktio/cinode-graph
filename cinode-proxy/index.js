@@ -47,6 +47,34 @@ function getSkills(skillName) {
     .catch(error => console.log('Error: ', error));
 }
 
+function getUserSkills(id) {
+  const basic = new Buffer(
+    `${process.env.ACCESS_ID}:${process.env.ACCESS_SECRET}`,
+    'binary'
+  ).toString('base64');
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${basic}`
+    }
+  };
+
+  return axios
+    .get(apiUrl + '/token', config)
+    .then(res => {
+      const url = apiUrl + '/v0.1/companies/1404/users/' + id + '/skills';
+      return axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${res.data.access_token}`
+        }
+      });
+    })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => console.log('Error: ', error));
+}
+
 function getUsers() {
   const basic = new Buffer(
     `${process.env.ACCESS_ID}:${process.env.ACCESS_SECRET}`,
@@ -102,16 +130,19 @@ app.get('/skills/:id', async (req, res) => {
 app.get('/user/:id', async (req, res) => {
   getUsers().then(r => {
     const temp = r;
-    let userId;
+    let userId = 'no data';
     temp.map(t => {
-      const test = (t.firstname + ' ' + t.lastname).toLowerCase();
-      if (test === req.params.id.toLowerCase()) {
-        userId = t.companyUserId;
+      const test = t.firstName + ' ' + t.lastName;
+
+      if (test.toLowerCase() === req.params.id.toLowerCase()) {
+        userId = t.companyUserId.toString();
       }
     });
 
-    res.json({
-      id: userId
+    getUserSkills(userId).then(r => {
+      res.json({
+        data: r
+      });
     });
   });
 });
