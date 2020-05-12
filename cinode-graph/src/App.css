@@ -33,6 +33,17 @@
   margin-right: 0.1em;
 }
 
+.Search-button {
+  border-radius: 100px;
+  border: 1px solid white;
+  overflow: hidden;
+  padding: 1px;
+  margin-bottom: 1px;
+  display: flex;
+  justify-content: inherit;
+  align-items: center;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

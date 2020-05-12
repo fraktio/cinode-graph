@@ -78,10 +78,11 @@ const App = () => {
         </Modal>
         <form onSubmit={byTech ? handleSubmit : handleOther}>
           <label>
-            <div onClick={() => setByTech(!byTech)}>
+            <div className='Search-button' onClick={() => setByTech(!byTech)}>
               <Adjust />
               {byTech ? 'Search by technology:' : 'Search by employee:'}
             </div>
+
             <input
               type='text'
               value={searchString}
