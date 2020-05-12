@@ -45,11 +45,17 @@ const App = () => {
     });
   };
 
-  const handleOther = evt => {
+  const handleUserSubmit = evt => {
     evt.preventDefault();
     getUserSkills(searchString).then(r => {
-      // r.data.test.map(t => console.log('Skill', t));
-      console.log('DATA: ', r);
+      const temp: C[] = [];
+
+      r.skills.sort((a, b) => b.level - a.level);
+      r.skills.map(s => {
+        temp.push({ info: s.tech + ' level ' + s.level });
+      });
+      setContent(temp);
+      setTimeout(() => setModalVisible(true));
     });
   };
 
@@ -76,7 +82,7 @@ const App = () => {
             <p>{m.info}</p>
           ))}
         </Modal>
-        <form onSubmit={byTech ? handleSubmit : handleOther}>
+        <form onSubmit={byTech ? handleSubmit : handleUserSubmit}>
           <label>
             <div className='Search-button' onClick={() => setByTech(!byTech)}>
               <Adjust />

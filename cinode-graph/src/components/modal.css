@@ -11,14 +11,15 @@
   position: fixed;
   background: white;
   width: auto;
-  height: auto;
+  height: 100%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border: 3px solid #282c34;
   padding: 1%;
-  font-size: small;
+  font-size: auto;
   color: black;
+  overflow-y: scroll;
 }
 
 .display-block {

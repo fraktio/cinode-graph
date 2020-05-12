@@ -20,6 +20,8 @@ interface IProps {
 }
 
 const Chart = ({ data, f }: IProps) => {
+  let svg: any; // Document = Document as SVGElement;
+
   useEffect(() => {
     data && drawChart();
   }, [data]);
@@ -28,7 +30,7 @@ const Chart = ({ data, f }: IProps) => {
     const heightValue = 400;
     const widthValue = 600;
 
-    const svg = d3
+    svg = d3
       .select('#chart')
       .html('')
       .append('svg')
