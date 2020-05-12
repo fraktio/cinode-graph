@@ -9,5 +9,12 @@ export async function getResults(tech: string) {
 export async function getUserSkills(user: string) {
   const url = 'http://localhost:5000/user/' + user;
 
-  return await axios.get(url);
+  const res = await axios.get(url);
+  // TODO: All data formatting process to backend.
+  const temp = [] as any;
+  res.data.test.map(m =>
+    temp.push({ tech: m.keyword.masterSynonym, level: m.level })
+  );
+
+  return { user: user, skills: temp };
 }

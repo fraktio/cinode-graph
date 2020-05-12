@@ -48,6 +48,7 @@ const App = () => {
   const handleOther = evt => {
     evt.preventDefault();
     getUserSkills(searchString).then(r => {
+      // r.data.test.map(t => console.log('Skill', t));
       console.log('DATA: ', r);
     });
   };

@@ -141,7 +141,7 @@ app.get('/user/:id', async (req, res) => {
 
     getUserSkills(userId).then(r => {
       res.json({
-        data: r
+        test: r
       });
     });
   });
